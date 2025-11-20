@@ -3,10 +3,6 @@ numpy
 scikit-learn
 xgboost
 lightgbm
-torch
-torchvision
-rasterio
-gdal
 geopandas
 requests
 beautifulsoup4
