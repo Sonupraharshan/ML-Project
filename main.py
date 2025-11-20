@@ -12,19 +12,37 @@ def main():
     
     # 1. Data Collection
     print("\n--- Step 1: Data Collection ---")
+    
+    # Check if data already exists
+    ground_data_file = os.path.join(config.RAW_DATA_DIR, "ground_aqi_chennai.csv")
+    sat_data_file = os.path.join(config.RAW_DATA_DIR, "satellite_data_rural.csv")
+    weather_data_file = os.path.join(config.RAW_DATA_DIR, "weather_data_chennai.csv")
+    
     # Ground Data
-    ground_df = collect_ground_data.fetch_openaq_data()
-    collect_ground_data.save_data(ground_df, "ground_aqi_chennai.csv")
+    if os.path.exists(ground_data_file):
+        print(f"✓ Ground data already exists: {ground_data_file}")
+    else:
+        print("Collecting ground data...")
+        ground_df = collect_ground_data.fetch_openaq_data()
+        collect_ground_data.save_data(ground_df, "ground_aqi_chennai.csv")
     
     # Satellite Data
-    bounds = (config.RURAL_LAT_RANGE[0], config.RURAL_LAT_RANGE[1], 
-              config.RURAL_LON_RANGE[0], config.RURAL_LON_RANGE[1])
-    sat_df = collect_satellite_data.fetch_satellite_data("2023-01-01", "2023-01-30", bounds)
-    collect_satellite_data.save_data(sat_df, "satellite_data_rural.csv")
+    if os.path.exists(sat_data_file):
+        print(f"✓ Satellite data already exists: {sat_data_file}")
+    else:
+        print("Collecting satellite data...")
+        bounds = (config.RURAL_LAT_RANGE[0], config.RURAL_LAT_RANGE[1], 
+                  config.RURAL_LON_RANGE[0], config.RURAL_LON_RANGE[1])
+        sat_df = collect_satellite_data.fetch_satellite_data("2023-01-01", "2023-01-30", bounds)
+        collect_satellite_data.save_data(sat_df, "satellite_data_rural.csv")
     
     # Weather Data
-    weather_df = collect_weather_data.fetch_weather_data(config.CHENNAI_LAT, config.CHENNAI_LON, "2023-01-01", "2023-01-30")
-    collect_weather_data.save_data(weather_df, "weather_data_chennai.csv")
+    if os.path.exists(weather_data_file):
+        print(f"✓ Weather data already exists: {weather_data_file}")
+    else:
+        print("Collecting weather data...")
+        weather_df = collect_weather_data.fetch_weather_data(config.CHENNAI_LAT, config.CHENNAI_LON, "2023-01-01", "2023-01-30")
+        collect_weather_data.save_data(weather_df, "weather_data_chennai.csv")
     
     # 2. Preprocessing
     print("\n--- Step 2: Preprocessing ---")
